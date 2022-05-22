@@ -6,7 +6,7 @@ plugins {
 ext.versions = [
         'major':        0,
         'minor':        0,
-        'patch':        5,
+        'patch':        51,
 ]
 
 group = 'com.cincinnatiai'
@@ -24,14 +24,14 @@ java {
 task sourceJar(type: Jar) {
     from sourceSets.main.java.srcDirs
     classifier "sources"
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    exclude("META-INF/versions/9/module-info.class")
+//    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//    exclude("META-INF/versions/9/module-info.class")
 }
 
-jar {
-    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    exclude("META-INF/versions/9/module-info.class")
-}
+//jar {
+//    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+//    exclude("META-INF/versions/9/module-info.class")
+//}
 
 dependencies {
     // AWS
