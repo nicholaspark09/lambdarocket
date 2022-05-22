@@ -1,0 +1,143 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.cincinnatiai",
+    "module": "lambdarocket",
+    "version": "0.0.1",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.3.3"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.6.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "lambdarocket-0.0.1.jar",
+          "url": "lambdarocket-0.0.1.jar",
+          "size": 14696,
+          "sha512": "dee64687c6adcd7d8f366a090b0051c34853bdfc6e652774be3de423acff798e25e6e86931cf45bff2e31f3734f1a28df00450b62791d7fe4bf6a73f435d1d1e",
+          "sha256": "a5547fe21ff45575c336f165f0385b2cb70e659e92b5350976b5450b48a3d7d5",
+          "sha1": "1105aec6b044968e359f0dc128bdf1213a058907",
+          "md5": "5414d69cc529f9ac95317c40fe72c306"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 11,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.amazonaws",
+          "module": "aws-lambda-java-core",
+          "version": {
+            "requires": "1.2.1"
+          }
+        },
+        {
+          "group": "com.amazonaws",
+          "module": "aws-lambda-java-events",
+          "version": {
+            "requires": "3.11.0"
+          }
+        },
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.8.6"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.6.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "lambdarocket-0.0.1.jar",
+          "url": "lambdarocket-0.0.1.jar",
+          "size": 14696,
+          "sha512": "dee64687c6adcd7d8f366a090b0051c34853bdfc6e652774be3de423acff798e25e6e86931cf45bff2e31f3734f1a28df00450b62791d7fe4bf6a73f435d1d1e",
+          "sha256": "a5547fe21ff45575c336f165f0385b2cb70e659e92b5350976b5450b48a3d7d5",
+          "sha1": "1105aec6b044968e359f0dc128bdf1213a058907",
+          "md5": "5414d69cc529f9ac95317c40fe72c306"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "lambdarocket-0.0.1-sources.jar",
+          "url": "lambdarocket-0.0.1-sources.jar",
+          "size": 4083,
+          "sha512": "1cc28e810cef0d7296cc94f96f9af7da2954c7a9f6f62f584d3177f0888f55116ff77837d5fcd10658460bc2c177d74e4058aaab55b45f1d2e4aa88e12cee807",
+          "sha256": "56868779a98856d2945d27ae55a47c3523852b2f619141b9ba52d90485ff1f74",
+          "sha1": "6037c601fd0cdc6df96a61dd7e27a93b3b42cc76",
+          "md5": "53261cefeaf6c44ed3e2a83d844f2e23"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "lambdarocket-0.0.1-javadoc.jar",
+          "url": "lambdarocket-0.0.1-javadoc.jar",
+          "size": 261,
+          "sha512": "8759462e649eb8160f51f2cdf5f0537b411806c85de6356b00e01b875968416ba8dbd0c8912ee1babd26f42c2514365c4f88208ff538df95a30cd66a55d324c0",
+          "sha256": "9f6d91606ab4127dd23224823e8a936512f9a4719eab1be368ee9cec3f592a98",
+          "sha1": "6a7840aae9292d7611978c5739f38ae64c07db9e",
+          "md5": "d613ecb7ebffbeeae1b02a193e402c9c"
+        }
+      ]
+    }
+  ]
+}
