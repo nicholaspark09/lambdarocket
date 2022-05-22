@@ -6,11 +6,11 @@ plugins {
 ext.versions = [
         'major':        0,
         'minor':        0,
-        'patch':        3,
+        'patch':        4,
 ]
 
 group = 'com.cincinnatiai'
-version = "${versions.marjo}.${versions.minor}.${versions.patch}-SNAPSHOT"
+version = "${versions.major}.${versions.minor}.${versions.patch}-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -20,6 +20,13 @@ repositories {
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+jar {
+    // This line of code recursively collects and copies all of a project's files
+    // and adds them to the JAR itself. One can extend this task, to skip certain
+    // files or particular types at will
+    from { configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 task sourceJar(type: Jar) {
