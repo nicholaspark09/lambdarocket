@@ -6,6 +6,7 @@ import com.cincinnatiai.lambdarocket.controller.RouteControllerContract
 import com.cincinnatiai.lambdarocket.router.RequestRouter
 import com.cincinnatiai.lambdarocket.router.RequestRouterContract
 import com.google.gson.Gson
+import java.lang.ModuleLayer.Controller
 
 /**
  * This class should be initialized in your project before `handleRequest` is called
@@ -29,11 +30,11 @@ class LambdaRocket private constructor(
         var INSTANCE: LambdaRocket? = null
 
         @JvmStatic
-        fun initialize(context: Context) {
+        fun initialize(context: Context, vararg controllers: RouteControllerContract) {
             if (INSTANCE == null) {
                 synchronized(this) {
                     if (INSTANCE == null) {
-                        INSTANCE = LambdaRocket(context)
+                        INSTANCE = LambdaRocket(context, controllers = controllers.toList())
                     }
                 }
             }
