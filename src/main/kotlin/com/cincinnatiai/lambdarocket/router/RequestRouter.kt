@@ -1,17 +1,14 @@
 package com.cincinnatiai.lambdarocket.router
 
-import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
-import com.cincinnatiai.lambdarocket.LambdaRocket
 import com.cincinnatiai.lambdarocket.controller.RouteControllerContract
 import com.cincinnatiai.lambdarocket.utils.EMPTY_STRING
 
 interface RequestRouterContract {
 
-    fun handleAllRoutes(input: APIGatewayProxyRequestEvent?, context: Context):
-            APIGatewayProxyResponseEvent
+    fun handleAllRoutes(input: APIGatewayProxyRequestEvent?): APIGatewayProxyResponseEvent
 }
 
 class RequestRouter(
@@ -20,28 +17,32 @@ class RequestRouter(
 ) : RequestRouterContract {
 
     override fun handleAllRoutes(
-        input: APIGatewayProxyRequestEvent?,
-        context: Context
+        input: APIGatewayProxyRequestEvent?
     ): APIGatewayProxyResponseEvent {
         val routeName = input?.resource ?: EMPTY_STRING
         val controller = controllers.firstOrNull { it.routeName == routeName }
         return when {
-            input == null -> createNotFoundResponse()
+            input == null -> createNotFoundResponse(input)
             controller == null -> {
                 logger?.log("No route controller implemented for route: $routeName")
-                createNotFoundResponse()
+                createNoControllerFoundResponse(input)
             }
             else -> controller.handleRoute(input)
         }
     }
 
-    private fun createNotFoundResponse() = APIGatewayProxyResponseEvent().apply {
+    private fun createNotFoundResponse(input: APIGatewayProxyRequestEvent?) = APIGatewayProxyResponseEvent().apply {
         statusCode = CODE_NOT_FOUND
-        body = NOT_FOUND_ERROR_BODY
+        body = "{\"error\": \"No input found.\"}"
     }
+
+    private fun createNoControllerFoundResponse(input: APIGatewayProxyRequestEvent?) =
+        APIGatewayProxyResponseEvent().apply {
+            statusCode = CODE_NOT_FOUND
+            body = "{\"error\": \"No controller found for that resource: ${input?.resource}\"}"
+        }
 
     companion object {
         const val CODE_NOT_FOUND = 500
-        const val NOT_FOUND_ERROR_BODY = "{\"error\": \"No route found for that url\"}"
     }
 }

@@ -6,7 +6,6 @@ import com.cincinnatiai.lambdarocket.controller.RouteControllerContract
 import com.cincinnatiai.lambdarocket.repository.ConfigRepositoryContract
 import com.cincinnatiai.lambdarocket.router.RequestRouter
 import com.cincinnatiai.lambdarocket.router.RequestRouterContract
-import com.google.gson.Gson
 
 /**
  * This class should be initialized in your project before `handleRequest` is called
@@ -45,6 +44,5 @@ class LambdaRocket private constructor(
         fun build(): LambdaRocket = LambdaRocket(this)
     }
 
-    val gson: Gson by lazy { Gson() }
     val requestRouter: RequestRouterContract by lazy { RequestRouter(logger, controllers) }
 }
