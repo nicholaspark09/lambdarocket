@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.cincinnatiai.lambdarocket.LambdaRocket
+import com.cincinnatiai.lambdarocket.controller.RouteControllerContract
 import com.cincinnatiai.lambdarocket.utils.EMPTY_STRING
 
 interface RequestRouterContract {
@@ -14,8 +15,8 @@ interface RequestRouterContract {
 }
 
 class RequestRouter(
-    private val logger: LambdaLogger,
-    private val rocket: LambdaRocket
+    private val logger: LambdaLogger? = null,
+    private val controllers: List<RouteControllerContract>
 ) : RequestRouterContract {
 
     override fun handleAllRoutes(
@@ -23,11 +24,11 @@ class RequestRouter(
         context: Context
     ): APIGatewayProxyResponseEvent {
         val routeName = input?.resource ?: EMPTY_STRING
-        val controller = rocket.findController(routeName)
+        val controller = controllers.firstOrNull { it.routeName == routeName }
         return when {
             input == null -> createNotFoundResponse()
             controller == null -> {
-                logger.log("No route controller implemented for route: $routeName")
+                logger?.log("No route controller implemented for route: $routeName")
                 createNotFoundResponse()
             }
             else -> controller.handleRoute(input)

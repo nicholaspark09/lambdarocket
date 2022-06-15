@@ -2,33 +2,43 @@ package com.cincinnatiai.lambdarocket.utils
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
-import com.cincinnatiai.lambdarocket.LambdaRocket
+import com.google.gson.Gson
 
-fun APIGatewayProxyRequestEvent.isUserLoggedIn() = this.getIdentityId().isNotBlank()
+fun APIGatewayProxyRequestEvent.isUserLoggedIn() = this.getIdentityId().isNotEmpty()
 
-fun <T> APIGatewayProxyResponseEvent.createSuccessResponse(data: T? = null, message: String = "") = this.apply {
-    statusCode = 200
-    body = when {
-        data != null -> LambdaRocket.instance().gson.toJson(data)
-        else -> message
+fun <T> APIGatewayProxyResponseEvent.createSuccessResponse(data: T? = null, message: String = "", gson: Gson = Gson()) =
+    this.apply {
+        statusCode = 200
+        body = when {
+            data != null -> gson.toJson(data)
+            else -> message
+        }
     }
-}
 
-fun APIGatewayProxyResponseEvent.createErrorResponse(statusCode: Int = 500, message: String = "Error processing request") = this.apply {
+fun APIGatewayProxyResponseEvent.createErrorResponse(
+    statusCode: Int = 500,
+    message: String = "Error processing request"
+) = this.apply {
     this.statusCode = statusCode
     body = message
 }
 
-fun APIGatewayProxyResponseEvent.notLoggedInResponse(statusCode: Int = 401, message: String = "Must be logged in") = this.apply {
-    this.statusCode = statusCode
-    body = message
-}
+fun APIGatewayProxyResponseEvent.notLoggedInResponse(statusCode: Int = 401, message: String = "Must be logged in") =
+    this.apply {
+        this.statusCode = statusCode
+        body = message
+    }
 
 fun APIGatewayProxyRequestEvent.getIdentityId(): String {
-    var id = ""
-    val regex = """sub=([a-zA-Z0-9\-]+)""".toRegex().find(this.requestContext.authorizer["claims"]?.toString() ?: "")
-    regex?.groups?.firstOrNull()?.value.let { foundText ->
-        id = foundText?.replace("sub=", "") ?: ""
+    lateinit var id: String
+    try {
+        val regex =
+            """sub=([a-zA-Z0-9\-]+)""".toRegex().find(this.requestContext.authorizer["claims"]?.toString() ?: "")
+        regex?.groups?.firstOrNull()?.value.let { foundText ->
+            id = foundText?.replace("sub=", "") ?: ""
+        }
+    } catch (e: Throwable) {
+        id = ""
     }
     return id
 }

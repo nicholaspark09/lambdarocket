@@ -3,6 +3,7 @@ package com.cincinnatiai.lambdarocket
 import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.LambdaLogger
 import com.cincinnatiai.lambdarocket.controller.RouteControllerContract
+import com.cincinnatiai.lambdarocket.repository.ConfigRepositoryContract
 import com.cincinnatiai.lambdarocket.router.RequestRouter
 import com.cincinnatiai.lambdarocket.router.RequestRouterContract
 import com.google.gson.Gson
@@ -12,34 +13,38 @@ import com.google.gson.Gson
  * in the RequestHandler
  */
 class LambdaRocket private constructor(
-    val context: Context,
-    val logger: LambdaLogger = context.logger,
-    val controllers: List<RouteControllerContract> = listOf()
+    builder: Builder
 ) {
+    val configRepository: ConfigRepositoryContract? by lazy { builder.configRepository }
+    val controllers: List<RouteControllerContract> = builder.controllers.toList()
+    val context: Context? = builder.context
+    val logger: LambdaLogger? = builder.logger
 
-    val gson: Gson by lazy { Gson() }
-    val requestRouter: RequestRouterContract by lazy { RequestRouter(logger, this) }
+    class Builder constructor() {
+        internal var context: Context? = null
+        internal var logger: LambdaLogger? = null
+        internal var configRepository: ConfigRepositoryContract? = null
+        internal val controllers: MutableSet<RouteControllerContract> = hashSetOf()
 
-    @Synchronized
-    fun findController(routeName: String) = controllers.firstOrNull { it.routeName == routeName }
-
-    companion object {
-
-        @Volatile
-        var INSTANCE: LambdaRocket? = null
-
-        @JvmStatic
-        fun initialize(context: Context, vararg controllers: RouteControllerContract) {
-            if (INSTANCE == null) {
-                synchronized(this) {
-                    if (INSTANCE == null) {
-                        INSTANCE = LambdaRocket(context, controllers = controllers.toList())
-                    }
-                }
-            }
+        fun setContext(context: Context) = apply {
+            this.context = context
         }
 
-        @JvmStatic
-        fun instance() = INSTANCE ?: throw IllegalArgumentException("Please initialize the library")
+        fun setLogger(logger: LambdaLogger) = apply {
+            this.logger = logger
+        }
+
+        fun setConfigRepository(configRepository: ConfigRepositoryContract) = apply {
+            this.configRepository = configRepository
+        }
+
+        fun addController(controller: RouteControllerContract) = apply {
+            this.controllers.add(controller)
+        }
+
+        fun build(): LambdaRocket = LambdaRocket(this)
     }
+
+    val gson: Gson by lazy { Gson() }
+    val requestRouter: RequestRouterContract by lazy { RequestRouter(logger, controllers) }
 }
