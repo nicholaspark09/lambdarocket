@@ -6,7 +6,7 @@ plugins {
 ext.versions = [
         'major':        0,
         'minor':        1,
-        'patch':        0,
+        'patch':        1,
 ]
 
 group = 'com.cincinnatiai'
@@ -38,8 +38,6 @@ dependencies {
     implementation("com.amazonaws:aws-lambda-java-core:1.2.1")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.0")
 
-    // Utils
-    implementation("com.google.code.gson:gson:2.8.6")
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
 
